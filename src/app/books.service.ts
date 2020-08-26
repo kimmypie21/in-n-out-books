@@ -1,12 +1,13 @@
 /*
 ============================================
-; Title: Exercise 6.2 Output Properties
+; Title: Exercise 8.2 Welcome to In-N-Out-Books
 ; Author: Kimberly Pierce
 ; Date: August 2020
 ; Modified By: Kimberly Pierce
-; Description: Exercise 6.2 Output Properties
+; Description: Exercise 8.2 Welcome to In-N-Out-Books
 ;===========================================
 */
+
 
 
 import { Injectable } from '@angular/core';
@@ -14,6 +15,7 @@ import { Observable } from 'rxjs';
 import { of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { IBook } from './book-interface';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 
 
@@ -22,58 +24,33 @@ import { IBook } from './book-interface';
 })
 export class BooksService {
 
-  books: Array<IBook>;
+  isbns: Array<string> =
+  [
+    '0345339681',
+    '0261103571',
+    '9780593099322',
+    '9780261102361',
+    '9780261102378',
+    '9780590302715',
+    '9780316769532',
+    '9780743273565',
+    '9780590405959'
+  ];
+  
+  
 
-  constructor() {
-    this.books = [
-      {
-        isbn: '0345339681',
-        title: 'The Hobbit',
-        description: 'Bilbo Baggins was a hobbit who wanted to be left alone in quiet comfort. But the wizard Gandalf came along with a band of homeless dwarves. Soon Bilbo was drawn into their quest, facing evil orcs, savage wolves, giant spiders, and worse unknown dangers. Finally, it was Bilbo–alone and unaided–who had to confront the great dragon Smaug, the terror of an entire countryside',
-        numOfPages: 322,
-        authors: ['J.R.R. Tolkien']
-      },
-      {
-        isbn: '0261103571',
-        title: 'The Fellowship of the Ring',
-        description: "The first volume in J.R.R. Tolkien's epic adventure THE LORD OF THE RINGS One Ring to rule them all, One Ring to find them, One Ring to bring them all and in the darkness bind them",
-        numOfPages: 432,
-        authors: ['J.R.R. Tolkien']
-      },
-      {
-        isbn: '1514297272',
-        title: 'The Two Towers',
-        description: "The second volume in J.R.R. Tolkien's epic adventure THE LORD OF THE RINGS",
-        numOfPages: 448,
-        authors: ['J.R.R. Tolkien']
-      },
-      {
-        isbn: '1514298139',
-        title: 'The Return of the King',
-        description: "The third volume in J.R.R. Tolkien's epic adventure THE LORD OF THE RINGS",
-        numOfPages: 432,
-        authors: ['J.R.R. Tolkien']
-      },
-      {
-        isbn: '9780593099322',
-        title: 'Dune',
-        description: "A deluxe hardcover edition of Frank Herbert’s epic masterpiece—a triumph of the imagination and one of the bestselling science fiction novels of all time.",
-        numOfPages: 688,
-        authors: ['Frank Herbert']
-      }
-    ]
+  constructor(private http: HttpClient) {
+    
+      
    }
 
-   getBooks(): Observable<IBook[]>{
-     return of (this.books);
+   getBooks(){
+     let params= new HttpParams();
+     params = params.append('bibkeys', `ISBN:${this.isbns.join(',')}`);
+     params = params.append('format', 'json');
+     params = params.append('jscmd', 'details');
+     return this.http.get("https://openlibrary.org/api/books", {params: params});
    }
 
-   getBook(isbn:string): IBook{
-     for (let book of this.books){
-       if (book.isbn === isbn ){
-         return book;
-       }
-     }
-   }
 
 }

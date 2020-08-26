@@ -1,12 +1,13 @@
 /*
 ============================================
-; Title: Exercise 6.2 Output Properties
+; Title: Exercise 8.2 Welcome to In-N-Out-Books
 ; Author: Kimberly Pierce
 ; Date: August 2020
 ; Modified By: Kimberly Pierce
-; Description: Exercise 6.2 Output Properties
+; Description: Exercise 8.2 Welcome to In-N-Out-Books
 ;===========================================
 */
+
 
 
 import { BrowserModule } from '@angular/platform-browser';
@@ -33,6 +34,8 @@ import { WishlistCreateComponent } from './wishlist-create/wishlist-create.compo
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { HttpClientModule } from '@angular/common/http';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -58,7 +61,9 @@ import { MatInputModule } from '@angular/material/input';
     MatDialogModule,
     FormsModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    HttpClientModule,
+    MatProgressSpinnerModule
   ],
 
   providers: [],

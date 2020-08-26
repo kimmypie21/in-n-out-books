@@ -1,12 +1,13 @@
 /*
 ============================================
-; Title: Exercise 6.2 Output Properties
+; Title: Exercise 8.2 Welcome to In-N-Out-Books
 ; Author: Kimberly Pierce
 ; Date: August 2020
 ; Modified By: Kimberly Pierce
-; Description: Exercise 6.2 Output Properties
+; Description: Exercise 8.2 Welcome to In-N-Out-Books
 ;===========================================
 */
+
 
 
 import { Component, OnInit } from '@angular/core';
@@ -23,19 +24,39 @@ import { BookDetailsDialogComponent } from '../book-details-dialog/book-details-
 })
 export class BookListComponent implements OnInit {
 
-  books:Observable<IBook[]>;
-  header: Array<string>=['isbn', 'title', 'numOfPages', 'authors'];
+  books:Array<IBook> = [];
   book: IBook;
 
   constructor( private booksService: BooksService, private dialog: MatDialog ) {
-    this.books = this.booksService.getBooks();
+    this.booksService.getBooks().subscribe(res=>{
+      this.booksService.getBooks().subscribe(res => {
+        console.log (res);
+        for(let key in res){
+          if(res.hasOwnProperty(key)){
+            let authors=[];
+            if (res[key].details.authors){
+              authors = res[key].details.authors.map(function(author){
+                return author.name;
+              })
+            }
+      this.books.push({
+        isbn: res[key].details.isbn_13 ? res[key].details.isbn_13 : res[key].details.isbn_10,
+        title: res[key].details.title,
+        description: res[key].details.subtitle ? res[key].details.subtitle : 'N/A',
+        numOfPages: res[key].details.number_of_pages,
+        authors: authors
+        })
+        }
+        }
+      });
+    });
    }
 
   ngOnInit(): void {
   }
 
   showBookDetails(isbn:string){
-    this.book = this.booksService.getBook(isbn);
+    this.book = this.books.find(book =>book.isbn ===isbn);
     const dialogRef = this.dialog.open(BookDetailsDialogComponent,{
       data: {book: this.book},
     disableClose: true,
